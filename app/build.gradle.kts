@@ -116,4 +116,9 @@ dependencies {
 
     // Compose Destinations
 //    implementation(libs.compose.destinations.core)
+
+    // Room
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
+    implementation(libs.room.paging)
 }

@@ -1,9 +1,14 @@
 package dev.pan.movierecommender.data.di
 
+import android.content.Context
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.pan.movierecommender.data.db.MovieDAO
+import dev.pan.movierecommender.data.db.MovieDatabase
 import dev.pan.movierecommender.data.network.ApiService
 import dev.pan.movierecommender.util.Constants
 import okhttp3.OkHttpClient
@@ -40,4 +45,19 @@ object AppModule {
             )
             .build()
             .create(ApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext appContext: Context) : MovieDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            MovieDatabase::class.java,
+            "movie_database"
+        ).build()
+    }
+
+    @Provides
+    fun provideUserDao(db: MovieDatabase) : MovieDAO {
+        return db.dao
+    }
 }

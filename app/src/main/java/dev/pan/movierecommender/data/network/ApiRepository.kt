@@ -10,4 +10,6 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
 
     suspend fun getNowPlaying(language: String, page: Int) = apiService.getNowPlaying(language, page)
 
+    suspend fun getGenres(language: String) = apiService.getGenres(language)
+
 }
