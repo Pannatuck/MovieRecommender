@@ -1,6 +1,8 @@
 package dev.pan.movierecommender
 import androidx.compose.ui.graphics.Color
 
+val CustomGold = Color(0xFFFD8800)
+
 val primaryLight = Color(0xFF006874)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFF9EEFFD)

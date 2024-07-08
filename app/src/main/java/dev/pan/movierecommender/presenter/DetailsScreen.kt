@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -39,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -50,6 +52,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import dev.pan.movierecommender.CustomGold
 import dev.pan.movierecommender.R
 import dev.pan.movierecommender.bodyFontFamily
 import dev.pan.movierecommender.data.db.MovieEntity
@@ -102,9 +105,13 @@ fun DetailsScreen(
                 contentDescription = "poster image",
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(8.dp)
+                    .clip(MaterialTheme.shapes.large)
+                    .shadow(20.dp)
                     .border(
                         width = 2.dp,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        shape = MaterialTheme.shapes.large
                     )
 
 
@@ -145,24 +152,29 @@ fun DetailsScreen(
                         }
                     ) {
                         Icon(
-                            imageVector = if(isFavorite == true) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
+                            painter = if(isFavorite == true) painterResource(id = R.drawable.ic_favorite_checked) else painterResource(id = R.drawable.ic_favorite_unchecked),
                             contentDescription = if (isFavorite == true) "Remove from favorite" else "Add to favorite",
                             tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.size(28.dp)
                         )
                     }
                 }
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
                     Icon(
-                        imageVector = Icons.Default.Star,
+                        painter = painterResource(R.drawable.ic_star),
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondary,
+                        tint = CustomGold,
+                        modifier = Modifier.size(18.dp)
                     )
+                    Spacer(Modifier.width(4.dp))
                     Text(text = state.details?.vote_average.toString(), fontFamily = bodyFontFamily)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 // TODO: reformat to pass as separate state
                 LazyRow {
-                    itemsIndexed(state.details?.genres.orEmpty()) { index, item ->
+                    itemsIndexed(state.details?.genres.orEmpty()) { _, item ->
                         val allGenres = state.genres?.genres
 
                         val genreName = allGenres?.find { it.id == item.id }?.name

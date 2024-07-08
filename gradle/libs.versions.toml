@@ -30,6 +30,7 @@ serialization = "1.6.3"
 playServicesLocation = "21.3.0"
 uiTextGoogleFonts = "1.6.8"
 room = "2.6.1"
+paging = "3.3.0"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
@@ -77,6 +78,9 @@ androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+
+paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging" }
 
 
 [plugins]

@@ -14,19 +14,15 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,9 +35,7 @@ import dev.pan.movierecommender.presenter.DetailsScreen
 import dev.pan.movierecommender.presenter.FavoritesScreen
 import dev.pan.movierecommender.presenter.HomeScreen
 import dev.pan.movierecommender.presenter.HomeViewModel
-import dev.pan.movierecommender.presenter.PopularScreen
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
+import dev.pan.movierecommender.presenter.NowShowingScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -59,6 +53,7 @@ class MainActivity : ComponentActivity() {
 
                 val viewModel = hiltViewModel<HomeViewModel>()
                 val state = viewModel.homeState.collectAsStateWithLifecycle().value
+
 
                 Scaffold(
                     bottomBar = {
@@ -89,6 +84,7 @@ class MainActivity : ComponentActivity() {
                                         contentDescription = screen.label,
                                         modifier = Modifier
                                             .size(24.dp)
+
                                     ) }
                                 )
                             }
@@ -101,7 +97,7 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.Home.route) {
                             HomeScreen(navController, state = state, modifier = Modifier.padding(padding))
                         }
-                        composable(Screen.Favorites.route) { FavoritesScreen(navController) }
+                        composable(Screen.Favorites.route) { FavoritesScreen(viewModel, navController) }
                         composable(
                             route = Screen.Details.route + "/{id}",
                             arguments = listOf(navArgument("id") {type = NavType.IntType})
@@ -109,12 +105,14 @@ class MainActivity : ComponentActivity() {
                             val id = backStackEntry.arguments?.getInt("id")
                             DetailsScreen(id = id, navController = navController, state = state, viewModel = viewModel)
                         }
-                        composable(Screen.Popular.route) {
-                            PopularScreen()
+                        composable(Screen.NowShowing.route) {
+                            NowShowingScreen(viewModel, navController)
                         }
                     }
 
                 }
+
+
 
                 SetBarColor(color = MaterialTheme.colorScheme.background)
 
@@ -139,7 +137,7 @@ sealed class Screen(val route: String, val icon: Int, val label: String) {
     object Home : Screen("home", R.drawable.ic_home, "home")
     object Favorites : Screen("favorite", R.drawable.ic_favorite, "favorite")
     object Details : Screen("details", R.drawable.ic_baby, "details")
-    object Popular : Screen("popular", R.drawable.ic_baby, "popular")
+    object NowShowing : Screen("nowShowing", R.drawable.ic_baby, "nowShowing")
 }
 
 val bottomNavItems = listOf(

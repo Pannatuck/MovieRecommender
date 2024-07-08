@@ -3,12 +3,19 @@ package dev.pan.movierecommender.presenter
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.pan.movierecommender.data.db.DatabaseRepository
 import dev.pan.movierecommender.data.db.MovieEntity
 import dev.pan.movierecommender.data.network.ApiRepository
+import dev.pan.movierecommender.data.network.models.nowPlaying.Result
 import dev.pan.movierecommender.presenter.data.HomeState
+import dev.pan.movierecommender.presenter.data.MoviePagingSource
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,8 +32,13 @@ class HomeViewModel @Inject constructor(
     private val _homeState = MutableStateFlow(HomeState())
     val homeState = _homeState.asStateFlow()
 
+    val nowPlayingPagingFlow: Flow<PagingData<Result>> = Pager(
+        config = PagingConfig(pageSize = 20),
+        pagingSourceFactory = { MoviePagingSource(apiRepository) }
+    ).flow.cachedIn(viewModelScope)
+
     private val _movies = MutableStateFlow<List<MovieEntity>>(emptyList())
-    val movies: StateFlow<List<MovieEntity>> = _movies
+    val movies = _movies.asStateFlow()
 
     private val _isFavorite = MutableStateFlow<Map<Int, Boolean>>(emptyMap())
     val isFavorite: StateFlow<Map<Int,Boolean>> = _isFavorite.asStateFlow()

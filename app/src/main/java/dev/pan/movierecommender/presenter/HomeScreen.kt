@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,8 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,6 +55,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import dev.pan.movierecommender.CustomGold
+import dev.pan.movierecommender.R
 import dev.pan.movierecommender.bodyFontFamily
 import dev.pan.movierecommender.presenter.data.HomeState
 import dev.pan.movierecommender.util.Constants
@@ -138,7 +145,7 @@ fun NowShowingSection(
                         MaterialTheme.colorScheme.primary,
                         MaterialTheme.shapes.extraLarge
                     )
-                    .clickable { navController.navigate("details") }
+                    .clickable { navController.navigate("nowShowing") }
                     .padding(10.dp),
                 fontSize = 12.sp,
                 fontFamily = bodyFontFamily,
@@ -195,11 +202,13 @@ fun NowShowingSection(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Star,
+                                modifier = Modifier.size(18.dp),
+                                painter = painterResource(R.drawable.ic_star),
                                 contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary,
-                                modifier = Modifier.size(20.dp)
+                                tint = CustomGold,
+
                             )
+                            Spacer(modifier = Modifier.width(4.dp))
                             Text(
                                 text = state.nowPlaying?.results?.get(index)?.vote_average.toString(),
                                 maxLines = 1,
@@ -235,25 +244,6 @@ fun PopularSection(
                 style = MaterialTheme.typography.titleLarge,
                 fontFamily = bodyFontFamily,
                 fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "See more",
-                modifier = Modifier
-                    .alpha(0.5f)
-                    .border(
-                        1.dp,
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.shapes.extraLarge
-                    )
-                    // TODO: below comment 
-                    /* popular and now showing screen are same, can be changed to call events instead
-                    and in viewModel depending on event populate screen with data from needed state
-                    */
-                    .clickable { navController.navigate("popular") }
-                    .padding(10.dp),
-                fontSize = 12.sp,
-                fontFamily = bodyFontFamily,
-                color = MaterialTheme.colorScheme.primary
             )
         }
 
@@ -303,12 +293,17 @@ fun PopularSection(
                                 fontFamily = bodyFontFamily
                             )
                             Spacer(modifier = Modifier.height(8.dp))
-                            Row {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            )
+                            {
                                 Icon(
-                                    imageVector = Icons.Default.Star,
+                                    painter = painterResource(R.drawable.ic_star),
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.secondary,
+                                    tint = CustomGold,
+                                    modifier = Modifier.size(18.dp)
                                 )
+                                Spacer(modifier = Modifier.width(4.dp))
                                 Text(text = state.nowPlaying?.results?.get(index)?.vote_average.toString())
                             }
                             Spacer(modifier = Modifier.height(8.dp))
