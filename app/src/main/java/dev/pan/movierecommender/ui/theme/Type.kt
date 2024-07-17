@@ -50,3 +50,18 @@ val AppTypography = Typography(
     labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
 )
 
+val test = Typography(
+    displayLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 22.sp
+    ),
+
+    displayMedium = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp
+    ),
+
+)
+

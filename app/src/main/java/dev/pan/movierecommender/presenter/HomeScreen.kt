@@ -159,12 +159,74 @@ fun NowShowingSection(
                 .padding(start = 20.dp)
         ) {
 
-            itemsIndexed(state.nowPlaying?.results ?: emptyList()) { index, item ->
+//            itemsIndexed(state.nowPlaying?.results ?: emptyList(), key = { _, item -> item.id }) { index, item ->
+//                Box(
+//                    modifier = Modifier
+//                        .padding(end = 16.dp)
+//                        .clickable { navController.navigate("details/${item.id}") }
+//
+//                ) {
+//                    Column(
+//                        modifier = Modifier
+//                            .width(IntrinsicSize.Min)
+//                    ) {
+//                        AsyncImage(
+//                            model = ImageRequest.Builder(LocalContext.current)
+//                                .data(
+//                                    "https://image.tmdb.org/t/p/w500" + state.nowPlaying?.results?.get(
+//                                        index
+//                                    )?.poster_path
+//                                )
+//                                .addHeader("Authorization", "Bearer ${Constants.API_KEY}")
+//                                .crossfade(true)
+//                                .diskCachePolicy(CachePolicy.ENABLED)// it's the same even removing comments
+//                                .build(),
+//                            contentDescription = "poster image",
+//                            modifier = Modifier
+//                                .clip(MaterialTheme.shapes.medium)
+//                                .width(120.dp)
+//                                .height(180.dp)
+//
+//                        )
+//                        Spacer(modifier = Modifier.height(4.dp))
+//                        Text(
+//                            text = state.nowPlaying?.results?.get(index)?.title ?: "",
+//                            modifier = Modifier.fillMaxWidth(),
+//                            maxLines = 1,
+//                            overflow = TextOverflow.Ellipsis,
+//                            style = MaterialTheme.typography.titleMedium,
+//                            fontFamily = bodyFontFamily
+//                        )
+//                        Row(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            Icon(
+//                                modifier = Modifier.size(18.dp),
+//                                painter = painterResource(R.drawable.ic_star),
+//                                contentDescription = null,
+//                                tint = CustomGold,
+//
+//                            )
+//                            Spacer(modifier = Modifier.width(4.dp))
+//                            Text(
+//                                text = state.nowPlaying?.results?.get(index)?.vote_average.toString(),
+//                                maxLines = 1,
+//                                overflow = TextOverflow.Ellipsis
+//                            )
+//                        }
+//                    }
+//                }
+//
+//            }
+
+            // key is not needed in this case, left as reference
+            itemsIndexed(state.nowPlaying?.results ?: emptyList(), key = { _, item -> item.id }) { index, item ->
                 Box(
                     modifier = Modifier
                         .padding(end = 16.dp)
-                        .clickable { navController.navigate("details/${item.id}") } 
-                    
+                        .clickable { navController.navigate("details/${item.id}") }
+
                 ) {
                     Column(
                         modifier = Modifier
@@ -172,11 +234,7 @@ fun NowShowingSection(
                     ) {
                         AsyncImage(
                             model = ImageRequest.Builder(LocalContext.current)
-                                .data(
-                                    "https://image.tmdb.org/t/p/w500" + state.nowPlaying?.results?.get(
-                                        index
-                                    )?.poster_path
-                                )
+                                .data("https://image.tmdb.org/t/p/w500${item.poster_path}")
                                 .addHeader("Authorization", "Bearer ${Constants.API_KEY}")
                                 .crossfade(true)
                                 .diskCachePolicy(CachePolicy.ENABLED)// it's the same even removing comments
@@ -190,7 +248,7 @@ fun NowShowingSection(
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = state.nowPlaying?.results?.get(index)?.title ?: "",
+                            text = item.title,
                             modifier = Modifier.fillMaxWidth(),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -207,10 +265,10 @@ fun NowShowingSection(
                                 contentDescription = null,
                                 tint = CustomGold,
 
-                            )
+                                )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(
-                                text = state.nowPlaying?.results?.get(index)?.vote_average.toString(),
+                                text = item.vote_average.toString(),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -219,6 +277,7 @@ fun NowShowingSection(
                 }
 
             }
+
         }
     }
 }
